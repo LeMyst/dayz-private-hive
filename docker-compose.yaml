@@ -1,0 +1,23 @@
+services:
+  hive:
+    image: ghcr.io/lemyst/dayz-private-hive:latest
+    restart: unless-stopped
+    read_only: true
+    ports:
+      # Reachable from this machine only. Use "8080:8080" for servers on other machines.
+      - "127.0.0.1:8080:8080"
+    volumes:
+      # The DayZ server's mpmissions folder (every dayzOnline.* mission is served).
+      - ./mpmissions:/data/mpmissions:ro
+      # Characters and sessions.
+      - hive_store:/data/hive_store
+    # Any setting of config.py, as HIVE_<SETTING>. Lists are comma-separated.
+    environment:
+      HIVE_CHARACTER_SCOPE: global
+      # HIVE_SECRET_PATH: k3Qz9pLm2vXw7bNd
+      # HIVE_SHARDS: 123abc
+      # HIVE_ALLOWED_IPS: 10.4.2.41,10.4.2.0/24
+      # HIVE_STATUS_PASSWORD: change-me
+
+volumes:
+  hive_store:
